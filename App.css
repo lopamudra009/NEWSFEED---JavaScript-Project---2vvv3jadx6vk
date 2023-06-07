@@ -268,3 +268,30 @@
 .clicked {
     color: rgb(204, 0, 0);
 }
+
+#card {
+    width: 90vw;
+    border-radius: 20px;
+    background-color: #7777;
+    margin: 1rem auto;
+    padding: 0.75rem;
+    padding-bottom: 2.5rem;
+    height: 110px;
+}
+
+.bottom-wrapper {
+    display: flex;
+    width: 85vw;
+    justify-content: space-between;
+    align-items: center;
+    margin-top: 0.5rem;
+}
+
+#news-para {
+    height: 5px;
+    overflow: hidden;
+}
+
+#card .news-content {
+    padding-bottom: 2rem;
+}
