@@ -5,16 +5,17 @@ const categoryContainer = document.getElementById("category-news-container");
 // since we are rendering news of different categories hence category is also as argument variable
 function genrateCard(item, category) {
     // we are creating a card with the help of template literal 
-    const card = `<div class="card">
+    const card = `<div class="card" id="card">
         <div class="card-header">
             <h3>Author name : ${item.author}</h3>
             <p class="news-category">Category <span>${category}</span> </p>
         </div>
-        <p class="news-content">
+        <p id="news-para" class="news-content">
             ${item.content}
-            <button class="read-more">Read more</button>
         </p>
-        <div class="like-btn"><i class="fa fa-heart"></i>
+        <div class="bottom-wrapper">
+                <button class="read-more" id="read-more">Read more...</button>
+                <div class="like-btn"><i class="fa fa-heart"></i></div>
         </div>
     </div>`
     // returning the created card 
@@ -34,110 +35,77 @@ function likeFunctionality() {
     })
 }
 
-function Business() {
-    fetch('https://inshorts.deta.dev/news?category=business')
-        .then(response => response.json())
+
+function categoryHandler(newsCategory) { //newsCat is a param variable which is coming from button click
+    // different buttons are sending different args
+    // like : Business btn is sending "business" as an arg and hatke btn is seding "hatke" arg.
+    let url = `https://inshorts.deta.dev/news?category=${newsCategory}`; // this is called string interpolation and within backticks we define template literal ``=> this wss introduced in es6
+    fetch(url)  // according to the updated url we are fetching the data .
+        .then((response) => {
+            console.log(response);
+            return response.json()
+        })
         .then(data => {
-            // reseting the container
             categoryContainer.innerHTML = "";
-            // gettign category out of the object recieved
             const category = data.category;
-            // mapping over each element of the recieved array 
             data.data.map(item => {
-                const card = genrateCard(item, category)
-                //appending the recieved card inside of already existing html content as a html content
-                categoryContainer.innerHTML += card;
+                categoryContainer.innerHTML += genrateCard(item, category);
             })
-            // calling like functionality
             likeFunctionality();
+            readMoreFunctionality();
         })
 }
 
-function All() {
-    fetch('https://inshorts.deta.dev/news?category=all')
-        .then(response => response.json())
-        .then(data => {
-            categoryContainer.innerHTML = "";
-            const category = data.category;
-            data.data.map(item => {
-                const card = genrateCard(item, category)
-                categoryContainer.innerHTML += card;
-            })
-            likeFunctionality();
+
+
+// this expanded flag is to keep a check for the expansion of the card
+function readMoreFunctionality() {
+    const readMoreBtns = document.querySelectorAll("#read-more");
+    const paras = document.querySelectorAll("#news-para");
+    const cards = document.querySelectorAll("#card");
+    let expanded = false;
+    readMoreBtns.forEach((btn, index) => {
+        btn.addEventListener("click", () => {
+            if (!expanded) { // !expanded && readMoreBtn[index] === btn
+                paras[index].style.height = 80 + 'px';
+                cards[index].style.height = 150 + 'px'
+                btn.innerText = "Show Less"
+                expanded = true;
+            }
+            else {
+                btn.innerText = "Read More..."
+                cards[index].style.height = 110 + 'px'
+                paras[index].style.height = 5 + "px";
+                expanded = false;
+            }
         })
-}
-function Sports() {
-    fetch('https://inshorts.deta.dev/news?category=sports')
-        .then(response => response.json())
-        .then(data => {
-            categoryContainer.innerHTML = "";
-            const category = data.category;
-            data.data.map(item => {
-                const card = genrateCard(item, category)
-                categoryContainer.innerHTML += card;
-            })
-            likeFunctionality();
-        })
-}
-function Worlds() {
-    fetch('https://inshorts.deta.dev/news?category=world')
-        .then(response => response.json())
-        .then(data => {
-            categoryContainer.innerHTML = "";
-            const category = data.category;
-            data.data.map(item => {
-                categoryContainer.innerHTML += genrateCard(item, category);
-            })
-            likeFunctionality();
-        })
-}
-function Politics() {
-    fetch('https://inshorts.deta.dev/news?category=politics')
-        .then(response => response.json())
-        .then(data => {
-            categoryContainer.innerHTML = "";
-            const category = data.category;
-            data.data.map(item => {
-                categoryContainer.innerHTML += genrateCard(item, category);
-            })
-            likeFunctionality();
-        })
+    })
 }
 
-function Hatke() {
-    fetch('https://inshorts.deta.dev/news?category=hatke')
-        .then(response => response.json())
-        .then(data => {
-            categoryContainer.innerHTML = "";
-            const category = data.category;
-            data.data.map(item => {
-                categoryContainer.innerHTML += genrateCard(item, category);
-            })
-            likeFunctionality();
-        })
-}
 
-function Science() {
-    fetch('https://inshorts.deta.dev/news?category=science')
-        .then(response => response.json())
-        .then(data => {
-            categoryContainer.innerHTML = "";
-            const category = data.category;
-            data.data.map(item => {
-                categoryContainer.innerHTML += genrateCard(item, category);
-            })
-            likeFunctionality();
-        })
-}
-function Automobile() {
-    fetch('https://inshorts.deta.dev/news?category=automobile')
-        .then(response => response.json())
-        .then(data => {
-            categoryContainer.innerHTML = "";
-            const category = data.category;
-            data.data.map(item => {
-                categoryContainer.innerHTML += genrateCard(item, category);
-            })
-            likeFunctionality();
-        })
-}
+
+// const para = document.getElementById("news-para");
+// const readMoreBtn = document.getElementById("read-more");
+// const savedNewsCard = document.getElementById("card");
+
+
+
+// readMoreBtn.addEventListener("click", () => {
+//     if (!expanded) {
+//         para.style.height = 80 + 'px';
+//         savedNewsCard.style.height = 150 + 'px'
+//         readMoreBtn.innerText = "Show Less"
+//         expanded = true;
+//     }
+//     else {
+//         readMoreBtn.innerText = "Read More..."
+//         savedNewsCard.style.height = 110 + 'px'
+//         para.style.height = 5 + "px";
+//         expanded = false;
+//     }
+// })
+
+
+
+
+
